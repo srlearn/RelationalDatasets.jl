@@ -10,3 +10,5 @@ ZipFile = "a5390f91-8eb1-5f08-bee0-b1d1ffed6cea"
 
 [compat]
 julia = "1.0"
+HTTP = "^0.9.0"
+ZipFile = "^0.9.3"
