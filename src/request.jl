@@ -1,11 +1,6 @@
 # Copyright © 2021 Alexander L. Hayes
 # Apache 2.0 License
 
-# TODO(hayesall): Cross-platform paths?
-# TODO(hayesall): ZipFile's build is a little weird, make sure it works in CI
-#   using Pkg
-#   Pkg.instantiate()
-
 """Request copies of relational datasets.
 """
 
