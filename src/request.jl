@@ -12,8 +12,8 @@
 using HTTP
 using ZipFile
 
-include("base.jl")
-include("types.jl")
+import("base.jl")
+import("types.jl")
 
 
 DATASETS = [

@@ -9,7 +9,12 @@ Notes
 - HTTP.jl: https://juliaweb.github.io/HTTP.jl/stable/
 """
 
+module RelationalDatasets
+
+using HTTP
+using ZipFile
+
 include("base.jl")
+include("types.jl")
 
-
-println(get_data_home())
+end # module

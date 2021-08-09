@@ -1,9 +1,12 @@
-module FooTest
+# Copyright © 2021 Alexander L. Hayes
+# Apache 2.0 License
 
-    using Test
+module RelationalDatasetsTest
 
-    @testset "Bar" begin
-        @test 1 == 1
-    end
+using Test
+using RelationalDatasets
 
-end
+include("test_base.jl")
+include("test_types.jl")
+
+end # module
