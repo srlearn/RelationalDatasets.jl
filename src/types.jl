@@ -5,12 +5,7 @@
 Custom Types
 """
 
-RelationalDataset = @NamedTuple begin
-    pos::Vector{String}
-    neg::Vector{String}
-    facts::Vector{String}
-end
-
+#=
 data = RelationalDataset((
     ["cancer(alice)."],
     ["cancer(dan)."],
@@ -18,3 +13,11 @@ data = RelationalDataset((
 ))
 
 println(data)
+=#
+
+
+RelationalDataset = @NamedTuple begin
+    pos::Vector{String}
+    neg::Vector{String}
+    facts::Vector{String}
+end

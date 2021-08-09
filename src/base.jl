@@ -4,15 +4,24 @@
 
 function get_data_home(data_home::Union{String, Nothing} = nothing)::String
 
+    _path = ""
+
     if data_home == nothing
-        # Try setting using the RELATIONAL_DATASETS environment variables.
-        println("data home is not set")
+        try
+            _path = Base.Filesystem.expanduser(ENV["RELATIONAL_DATASETS"])
+        catch e
+            _path = Base.Filesystem.expanduser(
+                Base.Filesystem.joinpath("~", "relational_datasets")
+            )
+        end
     end
 
-    return "/home/hayesall/relational_datasets/"
-
+    return Base.Filesystem.mkpath(_path)
 end
 
 
-function clear_data_home(data_home::Union{String, Nothing})::nothing
+function clear_data_home(data_home::Union{String, Nothing} = nothing)
+    path = get_data_home(data_home)
+    Base.Filesystem.rm(path, force=true, recursive=true)
+    return nothing
 end
