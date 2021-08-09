@@ -12,8 +12,8 @@
 using HTTP
 using ZipFile
 
-import("base.jl")
-import("types.jl")
+include("base.jl")
+include("types.jl")
 
 
 DATASETS = [
@@ -38,9 +38,66 @@ Load the training and test folds for a dataset.
 """
 function load(name::String, version::Union{String, Nothing} = nothing; fold::Int64 = 1)
     data_location = fetch(name, version)
-    return data_location
+    return deserialize_zipfile(data_location, name, fold=fold)
 end
 
+
+function deserialize_zipfile(data_location::String, name::String; fold::Int64 = 1)
+
+    reader = ZipFile.Reader(data_location)
+
+    folds = _n_folds(reader)
+
+    train_pos, train_neg, train_facts = nothing, nothing, nothing
+    test_pos, test_neg, test_facts = nothing, nothing, nothing
+
+
+    # TODO(hayesall): The ZipFile.jl doesn't make it quite as easy to seek a file by name.
+    #   There's a package for building iterators out of tar archives, but it appears that
+    #   the only way to do a "file name lookup" is by building an intermediate dictionary
+    #   and jumping to the index of the name you want.
+    file_num = Dict{String, Int64}()
+    for (i, fname) in enumerate(reader.files)
+        file_num[fname.name] = i
+    end
+
+
+    if folds == 0
+        train_pos = readlines(reader.files[file_num["$(name)/train/train_pos.txt"]])
+        train_neg = readlines(reader.files[file_num["$(name)/train/train_neg.txt"]])
+        train_facts = readlines(reader.files[file_num["$(name)/train/train_facts.txt"]])
+
+        test_pos = readlines(reader.files[file_num["$(name)/test/test_pos.txt"]])
+        test_neg = readlines(reader.files[file_num["$(name)/test/test_neg.txt"]])
+        test_facts = readlines(reader.files[file_num["$(name)/test/test_facts.txt"]])
+
+    elseif fold > folds
+        throw(error("Fold ($(fold)) does not exist in $(data_location)"))
+
+    else
+
+        train_pos = readlines(reader.files[file_num["$(name)/fold$(fold)/train/train_pos.txt"]])
+        train_neg = readlines(reader.files[file_num["$(name)/fold$(fold)/train/train_neg.txt"]])
+        train_facts = readlines(reader.files[file_num["$(name)/fold$(fold)/train/train_facts.txt"]])
+
+        test_pos = readlines(reader.files[file_num["$(name)/fold$(fold)/test/test_pos.txt"]])
+        test_neg = readlines(reader.files[file_num["$(name)/fold$(fold)/test/test_neg.txt"]])
+        test_facts = readlines(reader.files[file_num["$(name)/fold$(fold)/test/test_facts.txt"]])
+
+    end
+
+
+    return RelationalDataset((
+        train_pos,
+        train_neg,
+        train_facts,
+    )), RelationalDataset((
+        test_pos,
+        test_neg,
+        test_facts,
+    ))
+
+end
 
 """
     fetch(name::String, version::Union{String, Nothing} = nothing)
@@ -62,17 +119,6 @@ function fetch(name::String, version::Union{String, Nothing} = nothing)::String
     return data_file
 end
 
-
-function _make_data_url(name::String, version::Union{String, Nothing} = nothing)::String
-    @assert name in DATASETS
-    if version == nothing
-        version = LATEST_VERSION
-    end
-
-    # TODO(hayesall): Enforce no v0.0.2 or v0.0.3
-    return "https://github.com/srlearn/datasets/releases/download/$(version)/$(name)_$(version).zip"
-end
-
 function _make_file_path(name::String, version::Union{String, Nothing} = nothing)::String
     @assert name in DATASETS
     if version == nothing
@@ -87,15 +133,34 @@ function _make_file_path(name::String, version::Union{String, Nothing} = nothing
     )
 end
 
-#=
-load("toy_cancer", "v0.0.4"; fold=1)
-load("webkb")
-load("webkb", "v0.0.3"; fold=2)
-load("boston_housing", "v0.0.4")
+function _make_data_url(name::String, version::Union{String, Nothing} = nothing)::String
+    @assert name in DATASETS
+    if version == nothing
+        version = LATEST_VERSION
+    end
 
-println(_make_data_url("toy_cancer"))
+    # TODO(hayesall): Enforce no v0.0.2 or v0.0.3
+    return "https://github.com/srlearn/datasets/releases/download/$(version)/$(name)_$(version).zip"
+end
 
-r = HTTP.request("GET", "http://httpbin.org/ip")
-println(r.status)
-println(String(r.body))
-=#
+"""Does this zipfile contain CV folds?"""
+function _has_folds(zip::ZipFile.Reader)::Bool
+    return any([occursin("fold", file.name) for file in zip.files])
+end
+
+"""How many folds does this contain?"""
+function _n_folds(zip::ZipFile.Reader)::Int64
+
+    if !_has_folds(zip)
+        return 0
+    end
+
+    numbers = Int64[]
+    for path in zip.files
+        if occursin("fold", path.name)
+            append!(numbers, parse(Int64, split(split(path.name, "fold")[2], "/")[1]))
+        end
+    end
+
+    return maximum(numbers)
+end
