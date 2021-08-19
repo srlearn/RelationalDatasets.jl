@@ -24,24 +24,13 @@ println(length(train.facts))
 
 ### From Registry
 
-WIP
-
-### From GitHub Source
-
 ```bash
-git clone https://github.com/srlearn/RelationalDatasets.jl.git
-cd RelationalDatasets.jl
+add RelationalDatasets
 ```
 
-```julia
-] add RelationalDatasets
-```
-
-`ZipFile.jl` seems to fail occasionally. If an error is raised, try
-instantiating the package:
+### From GitHub
 
 ```julia
-] activate .
 using Pkg
-Pkg.instantiate()
+Pkg.add(url="https://github.com/srlearn/RelationalDatasets.jl")
 ```
