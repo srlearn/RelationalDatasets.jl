@@ -4,6 +4,7 @@
 module RelationalDatasets
 
 include("request.jl")
+include("convert.jl")
 export load
 
 end # module
