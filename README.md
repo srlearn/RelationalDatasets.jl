@@ -5,7 +5,7 @@
 > or:
 >
 > *The [`relational-datasets`](https://github.com/srlearn/relational-datasets)
-Python package—but written in Julia.*
+> Python package—but written in Julia.*
 
 ## Usage
 
@@ -18,6 +18,7 @@ using RelationalDatasets
 train, test = load("webkb", "v0.0.4", fold=2)
 
 println(length(train.facts))
+# 1344
 ```
 
 ## Install

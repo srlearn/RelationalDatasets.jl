@@ -1,3 +1,0 @@
-# RelationalDatasets.jl
-
-## Getting Started
