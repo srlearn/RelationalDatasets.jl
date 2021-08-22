@@ -10,7 +10,10 @@ using ZipFile
 include("base.jl")
 include("types.jl")
 
-
+"""
+Available datasets from the
+[`srlearn/datasets`](https://github.com/srlearn/datasets) repository.
+"""
 DATASETS = [
     "toy_cancer",
     "toy_father",
@@ -23,6 +26,12 @@ DATASETS = [
     "icml",
     "boston_housing",
 ]
+
+"""Default download version.
+
+If a "version" parameter is not passed to `load`, a dataset of this version
+is downloaded by default.
+"""
 LATEST_VERSION = "v0.0.4"
 
 
@@ -96,6 +105,9 @@ end
 
 """
     fetch(name::String, version::Union{String, Nothing} = nothing)
+
+Download a dataset with `name` and `version`, write the zipfile to the cache
+directory, and return a string representing the path to the file on disk.
 """
 function fetch(name::String, version::Union{String, Nothing} = nothing)::String
 

@@ -5,7 +5,7 @@
 > or:
 >
 > *The [`relational-datasets`](https://github.com/srlearn/relational-datasets)
-Python package—but written in Julia.*
+> Python package—but written in Julia.*
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/srlearn/RelationalDatasets.jl)
 ![GitHub](https://img.shields.io/github/license/srlearn/RelationalDatasets.jl)
@@ -23,6 +23,7 @@ using RelationalDatasets
 train, test = load("webkb", "v0.0.4", fold=2)
 
 println(length(train.facts))
+# 1344
 ```
 
 ## Install
