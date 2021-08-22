@@ -9,5 +9,6 @@ using RelationalDatasets
 include("test_base.jl")
 include("test_types.jl")
 include("test_request.jl")
+include("test_convert.jl")
 
 end # module

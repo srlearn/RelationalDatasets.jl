@@ -12,14 +12,34 @@ include("types.jl")
 
 Convert a classification dataset to an ILP representation.
 """
-function from_vector(X::Vector{Vector{Int64}}, y::Vector{Int64})::RelationalDataset
-    println("Classification")
+function from_vector(X::Matrix{Int64}, y::Vector{Int64}, names::Union{Vector{String}, Nothing} = nothing)
 
-    for row in enumerate(transpose(X))
-        println(row)
+    # Make sure the X and y are valid.
+    @assert size(y)[1] == size(X)[2]
+
+    if names == nothing
+        names = ["v$(i)" for i in 1:size(X)[1] + 1]
     end
 
-    return RelationalDataset((["one"], ["two"], ["three"]))
+    pos, neg, facts = String[], String[], String[]
+
+    for (i, row) in enumerate(y)
+        if Bool(row)
+            push!(pos, "$(last(names))(id$(i)).")
+        else
+            push!(neg, "$(last(names))(id$(i)).")
+        end
+    end
+
+    for (i, col) in enumerate(eachrow(X))
+        var = names[i]
+        facts = vcat(facts, ["$(var)(id$(j),$(row))." for (j, row) in enumerate(col)])
+    end
+
+    modes = ["$(name)(+id,#var$(name))." for name in names[1:end-1]]
+    push!(modes, "$(last(names))(+id).")
+
+    return RelationalDataset((pos, neg, facts)), modes
 end
 
 """
@@ -27,7 +47,28 @@ end
 
 Convert a regression dataset to an ILP representation.
 """
-function from_vector(X::Vector{Vector{Int64}}, y::Vector{Float64})::RelationalDataset
-    println("Regression")
-    return RelationalDataset((["one"], ["two"], ["three"]))
+function from_vector(X::Matrix{Int64}, y::Vector{Float64}, names::Union{Vector{String}, Nothing} = nothing)
+
+    # Make sure the X and y are valid.
+    @assert size(y)[1] == size(X)[2]
+
+    if names == nothing
+        names = ["v$(i)" for i in 1:size(X)[1] + 1]
+    end
+
+    pos, neg, facts = String[], String[], String[]
+
+    for (i, row) in enumerate(y)
+        push!(pos, "regressionExample($(last(names))(id$(i)),$(row)).")
+    end
+
+    for (i, col) in enumerate(eachrow(X))
+        var = names[i]
+        facts = vcat(facts, ["$(var)(id$(j),$(row))." for (j, row) in enumerate(col)])
+    end
+
+    modes = ["$(name)(+id,#var$(name))." for name in names[1:end-1]]
+    push!(modes, "$(last(names))(+id).")
+
+    return RelationalDataset((pos, neg, facts)), modes
 end
