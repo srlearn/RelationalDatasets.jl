@@ -103,4 +103,23 @@ using RelationalDatasets
     )
 end
 
+@testset "Misaligned Classification and Regression" begin
+    @test_throws AssertionError RelationalDatasets.from_vector([[1] [2]], [1])
+    @test_throws AssertionError RelationalDatasets.from_vector([[1] [2]], [0.5])
+end
+
+@testset "Misaligned Custom Variable Names" begin
+    @test_throws AssertionError RelationalDatasets.from_vector(
+        [[1] [2]],
+        [1],
+        ["a", "b", "c", "d"],
+    )
+
+    @test_throws AssertionError RelationalDatasets.from_vector(
+        [[1] [2]],
+        [0.5],
+        ["a", "b", "c", "d"]
+    )
+end
+
 end # module

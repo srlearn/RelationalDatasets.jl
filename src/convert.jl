@@ -21,6 +21,9 @@ function from_vector(X::Matrix{Int64}, y::Vector{Int64}, names::Union{Vector{Str
         names = ["v$(i)" for i in 1:size(X)[1] + 1]
     end
 
+    # Make sure the names vector makes sense.
+    @assert length(names) - 1 == size(X)[1]
+
     pos, neg, facts = String[], String[], String[]
 
     for (i, row) in enumerate(y)
@@ -55,6 +58,9 @@ function from_vector(X::Matrix{Int64}, y::Vector{Float64}, names::Union{Vector{S
     if names == nothing
         names = ["v$(i)" for i in 1:size(X)[1] + 1]
     end
+
+    # Make sure the names vector makes sense.
+    @assert length(names) - 1 == size(X)[1]
 
     pos, neg, facts = String[], String[], String[]
 
