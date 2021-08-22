@@ -61,6 +61,46 @@ using RelationalDatasets
             "v4(+id).",
         ]
     )
+
+    @test RelationalDatasets.from_vector(
+        [[1, 1] [0, 1]],
+        [0, 1],
+        ["a", "b", "c"],
+    ) == (RelationalDatasets.RelationalDataset((
+        pos=["c(id2)."],
+        neg=["c(id1)."],
+        facts=[
+            "a(id1,1).",
+            "a(id2,0).",
+            "b(id1,1).",
+            "b(id2,1).",
+        ])),
+        [
+            "a(+id,#vara).",
+            "b(+id,#varb).",
+            "c(+id).",
+        ]
+    )
+
+    @test RelationalDatasets.from_vector(
+        [[1, 1] [0, 1]],
+        [0.5, 1.0],
+        ["a", "b", "c"],
+    ) == (RelationalDatasets.RelationalDataset((
+        pos=["regressionExample(c(id1),0.5).", "regressionExample(c(id2),1.0)."],
+        neg=[],
+        facts=[
+            "a(id1,1).",
+            "a(id2,0).",
+            "b(id1,1).",
+            "b(id2,1).",
+        ])),
+        [
+            "a(+id,#vara).",
+            "b(+id,#varb).",
+            "c(+id).",
+        ]
+    )
 end
 
 end # module
