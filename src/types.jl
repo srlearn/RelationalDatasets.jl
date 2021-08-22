@@ -23,6 +23,7 @@ train = RelationalDatasets.RelationalDataset((
     neg=["related(b,c)."],
     facts=["child(a,b)."],
 ))
+```
 
 Instances of `RelationalDataset` are returned by `load`:
 
