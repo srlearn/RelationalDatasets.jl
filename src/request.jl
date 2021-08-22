@@ -90,6 +90,7 @@ function deserialize_zipfile(data_location::String, name::String; fold::Int64 = 
 
     end
 
+    close(reader)
 
     return RelationalDataset((
         train_pos,
