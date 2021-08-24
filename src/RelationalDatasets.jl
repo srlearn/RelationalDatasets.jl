@@ -9,4 +9,6 @@ export load
 include("convert.jl")
 export from_vector
 
+include("graphs.jl")
+
 end # module
