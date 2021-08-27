@@ -8,7 +8,7 @@ representation.
 include("types.jl")
 
 """
-    from_vector()
+    from_vector(X::Matrix{Int}, y::Vector{Int}, names::Union{Vector{String}, Nothing} = nothing)
 
 Convert a classification dataset to an ILP representation.
 """
@@ -46,7 +46,7 @@ function from_vector(X::Matrix{Int64}, y::Vector{Int64}, names::Union{Vector{Str
 end
 
 """
-    from_vector()
+    from_vector(X::Matrix{Int}, y::Vector{Float64}, names::Union{Vector{String}, Nothing} = nothing)
 
 Convert a regression dataset to an ILP representation.
 """
