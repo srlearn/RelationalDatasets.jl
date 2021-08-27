@@ -9,7 +9,7 @@ using RelationalDatasets
 @testset "Test converting propositional datasets" begin
 
     @test RelationalDatasets.from_vector(
-        [[0, 1, 1] [1, 0, 2] [2, 2, 0]],
+        [0 1 1; 1 0 2; 2 2 0],
         [0, 0, 1],
     ) == (RelationalDatasets.RelationalDataset((
             pos=["v4(id3)."],
@@ -34,7 +34,7 @@ using RelationalDatasets
     )
 
     @test RelationalDatasets.from_vector(
-        [[0, 1, 1] [1, 0, 2] [2, 2, 0]],
+        [0 1 1; 1 0 2; 2 2 0],
         [0.1, 0.2, 0.3],
     ) == (RelationalDatasets.RelationalDataset((
         pos=[
@@ -63,7 +63,7 @@ using RelationalDatasets
     )
 
     @test RelationalDatasets.from_vector(
-        [[1, 1] [0, 1]],
+        [1 1; 0 1],
         [0, 1],
         ["a", "b", "c"],
     ) == (RelationalDatasets.RelationalDataset((
@@ -83,7 +83,7 @@ using RelationalDatasets
     )
 
     @test RelationalDatasets.from_vector(
-        [[1, 1] [0, 1]],
+        [1 1; 0 1],
         [0.5, 1.0],
         ["a", "b", "c"],
     ) == (RelationalDatasets.RelationalDataset((
@@ -104,19 +104,19 @@ using RelationalDatasets
 end
 
 @testset "Misaligned Classification and Regression" begin
-    @test_throws AssertionError RelationalDatasets.from_vector([[1] [2]], [1])
-    @test_throws AssertionError RelationalDatasets.from_vector([[1] [2]], [0.5])
+    @test_throws AssertionError RelationalDatasets.from_vector([1 2], [1])
+    @test_throws AssertionError RelationalDatasets.from_vector([1 2], [0.5])
 end
 
 @testset "Misaligned Custom Variable Names" begin
     @test_throws AssertionError RelationalDatasets.from_vector(
-        [[1] [2]],
+        [1 2],
         [1],
         ["a", "b", "c", "d"],
     )
 
     @test_throws AssertionError RelationalDatasets.from_vector(
-        [[1] [2]],
+        [1 2],
         [0.5],
         ["a", "b", "c", "d"]
     )
