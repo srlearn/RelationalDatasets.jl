@@ -34,7 +34,7 @@ function from_vector(X::Matrix{Int64}, y::Vector{Int64}, names::Union{Vector{Str
         end
     end
 
-    for (i, col) in enumerate(eachrow(X))
+    for (i, col) in enumerate(eachcol(X))
         var = names[i]
         facts = vcat(facts, ["$(var)(id$(j),$(row))." for (j, row) in enumerate(col)])
     end
@@ -68,7 +68,7 @@ function from_vector(X::Matrix{Int64}, y::Vector{Float64}, names::Union{Vector{S
         push!(pos, "regressionExample($(last(names))(id$(i)),$(row)).")
     end
 
-    for (i, col) in enumerate(eachrow(X))
+    for (i, col) in enumerate(eachcol(X))
         var = names[i]
         facts = vcat(facts, ["$(var)(id$(j),$(row))." for (j, row) in enumerate(col)])
     end
