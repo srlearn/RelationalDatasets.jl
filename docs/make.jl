@@ -20,3 +20,7 @@ makedocs(
         "Types" => "types.md",
     ]
 )
+
+deploydocs(
+    repo = "github.com/srlearn/RelationalDatasets.jl.git",
+)
