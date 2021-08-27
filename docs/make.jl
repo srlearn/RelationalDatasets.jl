@@ -23,4 +23,5 @@ makedocs(
 
 deploydocs(
     repo = "github.com/srlearn/RelationalDatasets.jl.git",
+    devbranch = "main",
 )
