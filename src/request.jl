@@ -25,6 +25,8 @@ DATASETS = [
     "nell_sports",
     "icml",
     "boston_housing",
+    "drug_interactions",
+    "toy_machines",
 ]
 
 """Default download version.
@@ -32,7 +34,7 @@ DATASETS = [
 If a "version" parameter is not passed to `load`, a dataset of this version
 is downloaded by default.
 """
-LATEST_VERSION = "v0.0.4"
+LATEST_VERSION = "v0.0.5"
 
 
 """
