@@ -25,6 +25,8 @@ DATASETS = [
     "nell_sports",
     "icml",
     "boston_housing",
+    "drug_interactions",
+    "toy_machines",
 ]
 
 """Default download version.
