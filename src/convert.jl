@@ -7,6 +7,10 @@ representation.
 
 include("types.jl")
 
+function _is_multiclass(y::Vector{Int64})::Bool
+    return length(unique(y)) > 2
+end
+
 """
     from_vector(X::Matrix{Int}, y::Vector{Int}, names::Union{Vector{String}, Nothing} = nothing)
 
@@ -26,11 +30,22 @@ function from_vector(X::Matrix{Int64}, y::Vector{Int64}, names::Union{Vector{Str
 
     pos, neg, facts = String[], String[], String[]
 
-    for (i, row) in enumerate(y)
-        if Bool(row)
-            push!(pos, "$(last(names))(id$(i)).")
-        else
-            push!(neg, "$(last(names))(id$(i)).")
+    is_multiclass = _is_multiclass(y)
+
+    if is_multiclass
+
+        for (i, row) in enumerate(y)
+            push!(pos, "$(last(names))(id$(i),$(row)).")
+        end
+
+    else
+
+        for (i, row) in enumerate(y)
+            if Bool(row)
+                push!(pos, "$(last(names))(id$(i)).")
+            else
+                push!(neg, "$(last(names))(id$(i)).")
+            end
         end
     end
 
@@ -39,8 +54,14 @@ function from_vector(X::Matrix{Int64}, y::Vector{Int64}, names::Union{Vector{Str
         facts = vcat(facts, ["$(var)(id$(j),$(row))." for (j, row) in enumerate(col)])
     end
 
+
     modes = ["$(name)(+id,#var$(name))." for name in names[1:end-1]]
-    push!(modes, "$(last(names))(+id).")
+
+    if is_multiclass
+        push!(modes, "$(last(names))(+id,#classlabel).")
+    else
+        push!(modes, "$(last(names))(+id).")
+    end
 
     return RelationalDataset((pos, neg, facts)), modes
 end
