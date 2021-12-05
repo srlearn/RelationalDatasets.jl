@@ -2,7 +2,7 @@ name = "RelationalDatasets"
 uuid = "6b8bdb16-f930-11eb-22b5-7ba1dabdf7a8"
 license = "Apache 2.0"
 authors = ["Alexander L. Hayes <alexander@batflyer.net>"]
-version = "0.2.1"
+version = "0.2.2"
 
 [deps]
 HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
