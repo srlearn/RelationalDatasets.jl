@@ -35,7 +35,7 @@ function from_vector(X::Matrix{Int64}, y::Vector{Int64}, names::Union{Vector{Str
     if is_multiclass
 
         for (i, row) in enumerate(y)
-            push!(pos, "$(last(names))(id$(i),$(row)).")
+            push!(pos, "$(last(names))(id$(i),$(last(names))_$(row)).")
         end
 
     else
@@ -51,7 +51,7 @@ function from_vector(X::Matrix{Int64}, y::Vector{Int64}, names::Union{Vector{Str
 
     for (i, col) in enumerate(eachcol(X))
         var = names[i]
-        facts = vcat(facts, ["$(var)(id$(j),$(row))." for (j, row) in enumerate(col)])
+        facts = vcat(facts, ["$(var)(id$(j),$(var)_$(row))." for (j, row) in enumerate(col)])
     end
 
 
@@ -91,7 +91,7 @@ function from_vector(X::Matrix{Int64}, y::Vector{Float64}, names::Union{Vector{S
 
     for (i, col) in enumerate(eachcol(X))
         var = names[i]
-        facts = vcat(facts, ["$(var)(id$(j),$(row))." for (j, row) in enumerate(col)])
+        facts = vcat(facts, ["$(var)(id$(j),$(var)_$(row))." for (j, row) in enumerate(col)])
     end
 
     modes = ["$(name)(+id,#var$(name))." for name in names[1:end-1]]
