@@ -27,6 +27,8 @@ DATASETS = [
     "boston_housing",
     "drug_interactions",
     "toy_machines",
+    "california_housing",
+    "roofworld20",
 ]
 
 """Default download version.
@@ -34,7 +36,7 @@ DATASETS = [
 If a "version" parameter is not passed to `load`, a dataset of this version
 is downloaded by default.
 """
-LATEST_VERSION = "v0.0.5"
+LATEST_VERSION = "v0.0.6"
 
 
 """
